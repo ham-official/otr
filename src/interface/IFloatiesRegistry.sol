@@ -7,4 +7,5 @@ interface IFloatiesRegistry {
         bytes floatyHash;
     }
     function register(RegistrationParams memory params) external returns (address);
+    function updateWl(address _addr, bool _value) external;
 }

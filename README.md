@@ -1,66 +1,57 @@
-## Foundry
+# Onchain Tipping Registry
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+<img src="./otr.png" style="max-width: 500px">
 
-Foundry consists of:
+OTR allows you to register and create tipping coins for any existing ERC20 token on Ham chain. <a href="https://docs.ham.fun">Documentation</a>.
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+See [DeployTippy.s.sol](./script/DeployTippy.s.sol) for a full example of creating an ERC20 token, registering a tipping symbol, and converting the ERC20 into the corresponding tippable coin.
 
-## Documentation
+## Prerequisites
 
-https://book.getfoundry.sh/
+1. Install [Foundry](https://book.getfoundry.sh/getting-started/installation)
+2. Install [Bun](https://bun.sh/docs/installation) (if you want to run the Typescript file to generate the tipping symbol hash)
+3. Install submodules
 
-## Usage
-
-### Build
-
-```shell
-$ forge build
+```
+git submodule update --init --recursive
 ```
 
-### Test
+4. Install bun dependencies
 
-```shell
-$ forge test
+```
+bun install
 ```
 
-### Format
+## Running the scripts
 
-```shell
-$ forge fmt
+Included is a shell script you can run to deploy an ERC20 token, register a tipping coin, and convert a portion of the original token into the tippable version.
+
+You can modify the [DeployTippy.s.sol](./script/DeployTippy.s.sol) file to include the tipping symbol you'd like to use and the [Tippy.sol](./src/mock/Tippy.sol) ERC20 to modify the original ERC20 contract.
+
+1. First copy the example env file and add the private key you'd like to use.
+
+```
+cp .env.example .env
 ```
 
-### Gas Snapshots
+2. You can get your tipping symbol by running the [getSymbolHash.ts](./ts/getSymbolHash.ts) script. Modify the script to include the tipping symbol you'd like to register.
 
-```shell
-$ forge snapshot
+```
+bun run ./ts/getSymbolHash.ts
 ```
 
-### Anvil
+3. Replace the `sym` variable in [DeployTippy.s.sol](./script/DeployTippy.s.sol) with the hash of your tipping symbol.
 
-```shell
-$ anvil
+4. Run the deploy script. You can remove the --broadcast flag from [deploy-tipping-coin.sh](./cli/deploy-tipping-coin.sh) to simulate running the transaction.
+
+```
+./cli/deply-otr.sh
 ```
 
-### Deploy
+## Running tests
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
+You must install Foundry before running tests.
+
 ```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
+forge test --fork-url https://rpc.ham.fun --match-path ./test/Otr.t.sol -vvv
 ```
