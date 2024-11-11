@@ -20,16 +20,12 @@ contract OtrTest is Test {
         vm.deal(deployer, 1 ether);
         vm.deal(dead, 1 ether);
         vm.startPrank(deployer);
-        
+
         Otr otrImplementation = new Otr();
         OtrProxy otrProxy = new OtrProxy(
             address(otrImplementation),
             deployer,
-            abi.encodeWithSelector(
-                Otr.initialize.selector,
-                address(floatiesRegistry),
-                feeReceiver
-            )
+            abi.encodeWithSelector(Otr.initialize.selector, address(floatiesRegistry), feeReceiver)
         );
         otr = Otr(address(otrProxy));
         floatiesRegistry.updateWl(address(otr), true);
@@ -45,7 +41,7 @@ contract OtrTest is Test {
         vm.startPrank(sender);
         tn100x.approve(address(otr), 250_000 ether);
         address madeUpTokenAddress = address(111);
-        uint balance = tn100x.balanceOf(sender);
+        uint256 balance = tn100x.balanceOf(sender);
         assertEq(balance, 250_000 ether);
         otr.register(madeUpTokenAddress, tippingSymbol, 0, address(0));
 
@@ -70,7 +66,7 @@ contract OtrTest is Test {
         otr.register(madeUpTokenAddress, tippingSymbol, 1000, uiFeeReceiver);
 
         // Expect balance of sender to be 0
-        uint balance = tn100x.balanceOf(sender);
+        uint256 balance = tn100x.balanceOf(sender);
         assertEq(balance, 0);
 
         // Expect balance of vault to contain fee

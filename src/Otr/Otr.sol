@@ -15,8 +15,8 @@ contract Otr is Owned, Initializable {
     address public PAYMENT_TOKEN;
     address public REGISTRY;
     address public FEE_RECEIVER;
-    uint public REGISTRATION_FEE;
-    uint public MAX_UI_FEE;
+    uint256 public REGISTRATION_FEE;
+    uint256 public MAX_UI_FEE;
 
     constructor() Owned(address(0)) {
         _disableInitializers();
@@ -33,21 +33,24 @@ contract Otr is Owned, Initializable {
     }
 
     error FeeTooHigh();
- 
+
     /// @notice Function used to register new tipping tokens
     /// @dev Sender must approve fee before calling this method
     /// @param tokenAddress ERC20 token that will be tipped. A new corresponding tipping token contract will be deployed for this token.
     /// @param tippingSymbolHash Hashed tipping symbol ie viem.toHex("$TIP")
     /// @param bpsFee Optional UI registration fee using basis points ie 10% = 1000
     /// @param feeRecipient Optional recipient of UI fee
-    function register(address tokenAddress, bytes calldata tippingSymbolHash, uint bpsFee, address feeRecipient) public returns (address){
-        if(bpsFee > MAX_UI_FEE) {
+    function register(address tokenAddress, bytes calldata tippingSymbolHash, uint256 bpsFee, address feeRecipient)
+        public
+        returns (address)
+    {
+        if (bpsFee > MAX_UI_FEE) {
             revert FeeTooHigh();
         }
-        uint fee = REGISTRATION_FEE * bpsFee / 10_000;
-        uint costMinusFee = REGISTRATION_FEE - fee;
+        uint256 fee = REGISTRATION_FEE * bpsFee / 10_000;
+        uint256 costMinusFee = REGISTRATION_FEE - fee;
         IERC20(PAYMENT_TOKEN).transferFrom(msg.sender, FEE_RECEIVER, costMinusFee);
-        if(fee > 0) {
+        if (fee > 0) {
             IERC20(PAYMENT_TOKEN).transferFrom(msg.sender, feeRecipient, fee);
         }
         address tippingToken = IFloatiesRegistry(REGISTRY).register(

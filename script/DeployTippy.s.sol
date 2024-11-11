@@ -13,11 +13,10 @@ contract Run is Script {
         vm.startBroadcast(deployerPrivateKey);
         address sender = vm.addr(deployerPrivateKey);
         Tippy tippy = new Tippy();
-        Otr otr =  Otr(0x0181795609a431A8C39eF020ad58f20fE77E8525);
+        Otr otr = Otr(0x0181795609a431A8C39eF020ad58f20fE77E8525);
 
         // Approve OTR to transfer TN100x
         IERC20(otr.PAYMENT_TOKEN()).approve(address(otr), 250_000 ether);
-
 
         address token = address(tippy);
         // Get this value using viem.toHex("$TIPPY"). Remove 0x prefix.
