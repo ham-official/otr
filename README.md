@@ -44,7 +44,7 @@ bun run ./ts/getSymbolHash.ts
 
 4. Run the deploy script. You can remove the --broadcast flag from [deploy-tipping-coin.sh](./cli/deploy-tipping-coin.sh) to simulate running the transaction.
 
-** You will need 250,000 $TN100x on Ham chain in the wallet submitting the transaction to register the tipping symbol. **
+**‼️ You will need 250,000 $TN100x on Ham chain in the wallet submitting the transaction to register the tipping symbol.**
 
 [TN100x on Base](https://basescan.org/address/0x5b5dee44552546ecea05edea01dcd7be7aa6144a)
 
