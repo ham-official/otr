@@ -26,6 +26,20 @@ bun install
 
 Included is a shell script you can run to deploy an ERC20 token, register a tipping coin, and convert a portion of the original token into the tippable version.
 
+---
+
+**‼️ Transactions will be submitted on Ham chain. You will need a small amount of ETH for gas and the required $TN100x for registering a tipping symbol.**
+
+**The cost to register a tipping symbol is 250,000 $TN100x. You will need 250,000 $TN100x on Ham chain in the wallet submitting the transaction to register the tipping symbol.**
+
+[TN100x on Base](https://basescan.org/address/0x5b5dee44552546ecea05edea01dcd7be7aa6144a)
+
+[TN100x on Ham](https://explorer.ham.fun/token/0xE8DD44d0791B73afe9066C3A77721f42d0844bEB)
+
+[Bridge](https://ham.fun/bridge)
+
+---
+
 You can modify the [DeployTippy.s.sol](./script/DeployTippy.s.sol) file to include the tipping symbol you'd like to use and the [Tippy.sol](./src/mock/Tippy.sol) ERC20 to modify the original ERC20 contract.
 
 1. First copy the example env file and add the private key you'd like to use.
@@ -42,18 +56,10 @@ bun run ./ts/getSymbolHash.ts
 
 3. Replace the `sym` variable in [DeployTippy.s.sol](./script/DeployTippy.s.sol) with the hash of your tipping symbol.
 
-4. Run the deploy script. You can remove the --broadcast flag from [deploy-tipping-coin.sh](./cli/deploy-tipping-coin.sh) to simulate running the transaction.
-
-**‼️ The cost to register a tipping symbol is 250,000 $TN100x. You will need 250,000 $TN100x on Ham chain in the wallet submitting the transaction to register the tipping symbol.**
-
-[TN100x on Base](https://basescan.org/address/0x5b5dee44552546ecea05edea01dcd7be7aa6144a)
-
-[TN100x on Ham](https://explorer.ham.fun/token/0xE8DD44d0791B73afe9066C3A77721f42d0844bEB)
-
-[Bridge](https://ham.fun/bridge)
+4. Run the deploy script. You can remove the `--broadcast` flag from [deploy-tipping-coin.sh](./cli/deploy-tipping-coin.sh) to simulate running the transaction.
 
 ```
-./cli/deply-otr.sh
+./cli/deploy-tipping-coin.sh
 ```
 
 ## Running tests
