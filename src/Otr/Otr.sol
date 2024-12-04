@@ -4,12 +4,7 @@ pragma solidity 0.8.23;
 import {Initializable} from "openzeppelin-contracts/contracts/proxy/utils/Initializable.sol";
 import {IERC20} from "openzeppelin-contracts/contracts/interfaces/IERC20.sol";
 import {Owned} from "solmate/auth/Owned.sol";
-import {IFloatiesRegistry} from "../interface/IFloatiesRegistry.sol";
-
-interface IFidMap {
-    function ownerFid(address _address) external view returns (uint256);
-    function fids(uint256 fid) external view returns (address);
-}
+import {ISymbolRegistry} from "../interface/ISymbolRegistry.sol";
 
 contract Otr is Owned, Initializable {
     address public PAYMENT_TOKEN;
@@ -26,7 +21,7 @@ contract Otr is Owned, Initializable {
         owner = msg.sender;
         PAYMENT_TOKEN = 0xE8DD44d0791B73afe9066C3A77721f42d0844bEB;
         REGISTRY = registry;
-        REGISTRATION_FEE = 250_000 ether;
+        REGISTRATION_FEE = 0.025 ether;
         FEE_RECEIVER = feeReceiver;
         MAX_UI_FEE = 1000;
         emit OwnershipTransferred(address(0), msg.sender);
@@ -49,12 +44,15 @@ contract Otr is Owned, Initializable {
         }
         uint256 fee = REGISTRATION_FEE * bpsFee / 10_000;
         uint256 costMinusFee = REGISTRATION_FEE - fee;
-        IERC20(PAYMENT_TOKEN).transferFrom(msg.sender, FEE_RECEIVER, costMinusFee);
+        (bool sent,) = FEE_RECEIVER.call{value: costMinusFee}("");
+        require(sent, "Transfer to FEE_RECEIVER failed");
+
         if (fee > 0) {
-            IERC20(PAYMENT_TOKEN).transferFrom(msg.sender, feeRecipient, fee);
+            (bool feeSent,) = feeRecipient.call{value: fee}("");
+            require(feeSent, "Transfer to feeRecipient failed");
         }
-        address tippingToken = IFloatiesRegistry(REGISTRY).register(
-            IFloatiesRegistry.RegistrationParams({
+        address tippingToken = ISymbolRegistry(REGISTRY).register(
+            ISymbolRegistry.RegistrationParams({
                 token: tokenAddress,
                 registrant: tokenAddress,
                 floatyHash: tippingSymbolHash

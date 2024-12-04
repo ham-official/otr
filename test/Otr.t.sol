@@ -2,13 +2,13 @@
 pragma solidity 0.8.23;
 
 import {Test} from "forge-std/Test.sol";
-import {IFloatiesRegistry} from "../src/interface/IFloatiesRegistry.sol";
+import {ISymbolRegistry} from "../src/interface/ISymbolRegistry.sol";
 import {IERC20} from "openzeppelin-contracts/contracts/interfaces/IERC20.sol";
 import {Otr} from "../src/Otr/Otr.sol";
 import {OtrProxy} from "../src/Otr/OtrProxy.sol";
 
 contract OtrTest is Test {
-    IFloatiesRegistry floatiesRegistry = IFloatiesRegistry(0xddbdb3d1cd151c65Eff370f09578Cd8FdA6535E3);
+    ISymbolRegistry floatiesRegistry = ISymbolRegistry(0xddbdb3d1cd151c65Eff370f09578Cd8FdA6535E3);
     IERC20 tn100x = IERC20(0xE8DD44d0791B73afe9066C3A77721f42d0844bEB);
     address deployer = 0x16760803046fFa4D05878333B0953bBDDc0C20Cb;
     address dead = 0x000000000000000000000000000000000000dEaD;
